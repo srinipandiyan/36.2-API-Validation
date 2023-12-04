@@ -1,6 +1,8 @@
+/** Books routes for app */
 const express = require("express");
-const router = new express.Router();
 const { validate } = require("jsonschema");
+const router = new express.Router();
+
 const Book = require("../models/book");
 const newBookSchema = require("../schemas/newBookSchema");
 const updateBookSchema = require("../schemas/updateBookSchema");
@@ -36,10 +38,10 @@ router.post("/", async function (req, res, next) {
     if (!validation.valid){
       return next({
         status: 400,
-        errors: validation.errors.map(err = err.stack)
+        errors: validation.errors.map(err => err.stack)
       });
     }
-    const book = Book.create(req.body);
+    const book = await Book.create(req.body);
     return res.status(201).json({ book });
   } catch (err) {
     return next(err);
